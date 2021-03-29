@@ -1,0 +1,73 @@
+---
+title: "Day2"
+output: html_document
+---
+
+```{r}
+library(MASS)
+V = 25
+n = nrow(X)
+fold = rep(1:V, n/V)
+err.knn = err.lda = rep(NA, V)
+for (v in 1:V){
+  learn = which(fold != v)
+  test = which(fold == v)
+  
+  # KNN (with an internal CV for picking K)
+  X2 = X[learn,]; Y2 = Y[learn]
+  K = 30; n2 = nrow(X2)
+  fold2 = rep(1:V, n2/V)
+  err.knn2 = matrix(NA, K, V)
+  
+  for (v2 in 1:v){ # Start of the internal CV
+    learn2 = which(fold2 != v2)
+    test2 = which(fold2 == v2)
+    for (k in 1:K){
+      ystar = knn(X2[learn2,], X2[test2,], Y2[learn2], k)
+      err.knn2[k, v2] = sum(ystar != Y2[test2]) / length(ystar)
+    }
+  }
+  Kstar = which.min(rowMeans(err.knn2)) # Choice of K* for this fold
+  
+  # Evaluation of the error for this fold
+  ystar = knn(X[learn,], X[test, ], y[learn], k=Kstar)
+  err.knn[v] = sum(ystar != Y[test]) / length(ystar)
+  
+  # LDA
+  f <- lda(X[learn,], Y[learn])
+  ystar = predict(f, X[test,])$class
+  err.lda[v] = sum(ystar != Y[test]) /length(ystar)
+}
+cat(paste('> KNN:',mean(err.knn), '+/-', sd(err.knn), '\n'))
+cat(paste('> LDA:',mean(err.knn), '+/-', sd(err.knn), '\n'))
+```
+
+
+```{r}
+install.packages('e1071')
+library(e1071)
+```
+
+A basic use of SVM on the iris data would be:
+
+````{r}
+data(iris)
+X = iris[,-5]
+Y = as.numeric(iris$Species)
+
+xstar = c(6, 2.9, 5, 3)
+f.svm = svm(X, Y, kernel = 'radial', gamma = 1, type = 'C-classification')
+ystar = predict(f.svm, matrix(xstar, nrow=1))
+ystar
+```
+
+
+```{r}
+data(iris)
+X = iris[,-5]
+Y = as.numeric(iris$Species)
+
+pca = princomp(X)
+biplot(pca)
+```
+

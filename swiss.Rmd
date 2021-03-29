@@ -1,0 +1,57 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+data(swiss)
+?swiss
+
+```
+> Remark: We observe here that 'hclust' can be applied to any type of data if we are able to compute for these data. Conversely, kmeans is restricted to continuous data due to the need to compute centers.
+
+> Exercises: Apply the different methods (group distances) of HC to compare the results.
+
+```{r}
+library(class)
+?hclust
+D = dist(swiss)
+
+par(mfrow=c(2,2))
+hc1 = hclust(D, method="complete"); plot(hc1)
+hc2 = hclust(D, method="single"); plot(hc2)
+hc3 = hclust(D, method="centroid"); plot(hc3)
+hc4 = hclust(D, method="ward.D2");plot(hc4)
+```
+
+```{r}
+install.packages("cluter")
+#install.packages("factoextra")
+#install.packages("gridExtra")
+library(tidyverse)
+library(cluter)
+library(gridExtra)
+```
+```{r}
+kmeans2 <- kmeans(as.matrix(swiss), centers=2)
+```
+
+
+> Remark: we can see here that the different methods lead to quite different dendrogram, leading in turn to different choices of numbers of clusters.
+> Good analysis is the one which helps analyst; you need to be clear with those analysis by yourself
+> Let's remember that the clustering aims to help the analyst to understand the data. The choice of a method should be done according to this idea!
+
+> A good way to verify that the different clustering make sense or not is to visualize the data with the clustering as an additional information (thanks to the colors)
+
+```{r}
+hc4=hclust(D,method="ward.D2")
+cl4=cutree(hc4, k=2)
+cl4
+```
+```{r}
+plot(swiss, col=cl4, pch=19)
+```
+
+Let's now compare the different cluserings on two specific variables(Catholic vs. Agriculture)
+
+```{r}
