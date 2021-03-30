@@ -52,3 +52,16 @@ hc2 = hclust(D, method="single"); plot(hc2)
 hc3 = hclust(D, method="centroid"); plot(hc3)
 hc4 = hclust(D, method="ward.D2");plot(hc4)
 ```
+
+
+```{r}
+
+# Comparison with kmeans and hclust 
+par(mfrow=c(1,3))
+hc = hclust(D, method="signle"); out.hc=cutree(hc, 4)
+plot(swiss[,c(5,2)]), col=out.hc, pch=19, main="HC(single)")
+out.km = kmeans(swiss, centers=3, nstart=10)
+plot(swiss[,c(5,2)], col=out.km$cluster, pch=19, cex=3, main="kmeans")
+plot(swiss[,c(5,2)], col=out$class)
+```
+

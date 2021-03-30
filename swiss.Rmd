@@ -121,3 +121,4 @@ plot(swiss, col=out5$cluster, pch=19)
 ```{r}
 plot(swiss[,c(5,2)], col=out5$cluster, pch=19)
 ```
+
