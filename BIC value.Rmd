@@ -4,6 +4,7 @@ output: html_notebook
 ---
 
 ```{r}
+install.packages("mclust")
 library(mclust)
 data(swiss)
 out = Mclust(swiss, G=1:5, modelNames="VVV")
