@@ -7,7 +7,7 @@ output: html_notebook
 # Reminder on descriptive statistics
 ```{r}
 data(iris)
-X = iris&Sepal.Length
+X = iris$Sepal.Length
 ```
 
 It tells a vert different story with the histogram if we use the different number of breaks:
@@ -48,7 +48,7 @@ boxplot(iris[,-5])
 The alternative would be:
 
 ```{r}
-par(mfrrow=c((2,2)))
+par(mfrrow=c(2,2))
 for (j in 1:4) boxplot(iris[,j], main=paste("variable", j))
 ```
 
@@ -95,7 +95,7 @@ X = iris[,-5]
 Y = as.numeric(iris$Species)
 
 library(MASS)
-system.time(f = lda(X,Y))
+system.time((f = lda(X,Y)))
 ```
 After the learning, it is possible to examine the output:
 
